@@ -61,21 +61,20 @@ app.use(errorHandler);
 
 
 // Database Connection & Server Startup
-mongoose.connect(process.env.DATABASE_URL) 
+mongoose.connect(process.env.MONGODB_URI) 
   .then(() => {
     console.log('Connected to MongoDB successfully!');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
     console.error('MongoDB database connection error:', err);
     // Fallback: database connection failed, but start server on port 3000 anyway
-    app.listen(3000, () => {
+    app.listen(3000, '0.0.0.0', () => {
       console.log('Server running on fallback port 3000. Note: MongoDB is not connected.');
     });
   });
 
-// Trigger reload
-// Local loopback trigger
-
+// Export app for Vercel serverless deployment
+module.exports = app;
